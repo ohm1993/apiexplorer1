@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
+import SideDrawer from "../components/SideDrawer";
 
 interface ApiDetails {
   logo?: string;
@@ -15,124 +16,20 @@ const AppContainer = styled.div<{ isOpen: boolean }>`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  padding: 20px;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    height: auto;
-    padding: 10px;
-  }
 `;
 
 const CenteredContainer = styled.div`
   text-align: center;
-  width: 100%;
-  @media (max-width: 768px) {
-    padding: 0 10px;
-  }
 `;
 
 const ExploreButton = styled.button`
   padding: 10px 20px;
   font-size: 16px;
   color: #fff;
-  background-color: #4ab8e0; 
+  background-color: #4ab8e0; /* Button color similar to the image */
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  @media (max-width: 768px) {
-    padding: 8px 16px;
-    font-size: 14px;
-  }
-`;
-
-const ApiList = styled.div`
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 300px;
-  height: 100%;
-  background-color: #395b74;
-  color: white;
-  padding: 20px;
-  overflow-y: auto;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
-  border-left: 2px solid #64d2ff;
-  @media (max-width: 768px) {
-    width: 100%;
-    height: 50%;
-    top: auto;
-    bottom: 0;
-    border-left: none;
-    border-top: 2px solid #64d2ff;
-  }
-`;
-
-const SelectProvider = styled.h2`
-  margin-top: 0;
-  font-size: 18px;
-  margin-bottom: 20px;
-`;
-
-const ProviderList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-`;
-
-const ProviderItem = styled.li`
-  padding: 10px;
-`;
-
-const ProviderHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const ArrowButton = styled.button`
-  background: none;
-  border: none;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-`;
-
-const ApiDetailsContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  height: 100%;
-  padding: 10px 0 0 0;
-  @media (max-width: 768px) {
-    justify-content: center;
-  }
-`;
-
-const ApiLogo = styled.img`
-  object-fit: contain;
-  width: 25px;
-  height: 25px;
-  @media (max-width: 768px) {
-    width: 20px;
-    height: 20px;
-  }
-`;
-
-const ApiTitleButton = styled.button`
-  color: white;
-  padding: 8px;
-  text-decoration: none;
-  border-radius: 5px;
-  display: inline-block;
-  cursor: pointer;
-  border: none;
-  background: none;
-  vertical-align: middle;
-  @media (max-width: 768px) {
-    padding: 6px;
-    font-size: 14px;
-  }
 `;
 
 const HomePage: React.FC = () => {
@@ -143,8 +40,7 @@ const HomePage: React.FC = () => {
   const [apiDetails, setApiDetails] = useState<ApiDetails>({});
   const apiListRef = useRef<HTMLDivElement | null>(null);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
+  const handleClick = () => {
     setIsOpen(!isOpen);
   };
 
@@ -209,51 +105,14 @@ const HomePage: React.FC = () => {
       <CenteredContainer>
         <ExploreButton onClick={handleClick}>Explore web APIs</ExploreButton>
         {isOpen && (
-          <ApiList ref={apiListRef}>
-            <SelectProvider>Select Provider</SelectProvider>
-            <ProviderList>
-              {providers.length > 0 ? (
-                providers.map((provider, index) => (
-                  <ProviderItem
-                    key={index}
-                    style={{
-                      backgroundColor:
-                        expandedProvider === provider ? "#1c2025" : "",
-                      borderRadius: expandedProvider === provider ? "5px" : "0",
-                    }}
-                  >
-                    <ProviderHeader>
-                      <span>{provider}</span>
-                      <ArrowButton
-                        onClick={() => handleProviderClick(provider)}
-                      >
-                        {expandedProvider === provider ? "▲" : "▼"}
-                      </ArrowButton>
-                    </ProviderHeader>
-                    {expandedProvider === provider && apiDetails && (
-                      <ApiDetailsContainer>
-                        {apiDetails.logo && (
-                          <ApiLogo
-                            src={apiDetails.logo}
-                            alt={apiDetails.title}
-                          />
-                        )}
-                        {apiDetails.title && (
-                          <ApiTitleButton
-                            onClick={() => handleNavigate(provider, apiDetails)}
-                          >
-                            {apiDetails.title}
-                          </ApiTitleButton>
-                        )}
-                      </ApiDetailsContainer>
-                    )}
-                  </ProviderItem>
-                ))
-              ) : (
-                <li>No providers available</li>
-              )}
-            </ProviderList>
-          </ApiList>
+          <SideDrawer
+            providers={providers}
+            handleProviderClick={handleProviderClick}
+            expandedProvider={expandedProvider}
+            apiDetails={apiDetails}
+            handleNavigate={handleNavigate}
+            toggleDrawer={handleClick}
+          />
         )}
       </CenteredContainer>
     </AppContainer>
