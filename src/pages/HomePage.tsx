@@ -1,5 +1,4 @@
-// src/pages/HomePage.tsx
-import React, { useState, useEffect, useRef, MouseEvent } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
@@ -26,7 +25,7 @@ const ExploreButton = styled.button`
   padding: 10px 20px;
   font-size: 16px;
   color: #fff;
-  background-color: #4ab8e0; /* Button color similar to the image */
+  background-color: #4ab8e0; 
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -43,6 +42,7 @@ const ApiList = styled.div`
   padding: 20px;
   overflow-y: auto;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+  border-left: 2px solid #64d2ff;
 `;
 
 const SelectProvider = styled.h2`
@@ -59,20 +59,12 @@ const ProviderList = styled.ul`
 
 const ProviderItem = styled.li`
   padding: 10px;
-  border-bottom: 1px solid #2d3e4f;
-  margin-bottom: 10px;
-  &.highlighted {
-    background-color: #1c2025;
-    display: flex;
-    align-items: center;
-  }
 `;
 
 const ProviderHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  
 `;
 
 const ArrowButton = styled.button`
@@ -85,27 +77,28 @@ const ArrowButton = styled.button`
 
 const ApiDetailsContainer = styled.div`
   display: flex;
-  align-items: center; 
-  justify-content: center;
-  height: 100%; 
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  padding: 10px 0 0 0;
 `;
 
 const ApiLogo = styled.img`
-  height: 24px;
-  margin-right: 8px;
+  object-fit: contain;
+  width: 25px;
+  height: 25px;
 `;
 
 const ApiTitleButton = styled.button`
   color: white;
-  padding: 8px 12px;
+  padding: 8px;
   text-decoration: none;
   border-radius: 5px;
   display: inline-block;
-  margin-top: 10px;
   cursor: pointer;
   border: none;
   background: none;
-  vertical-align: middle; 
+  vertical-align: middle;
 `;
 
 const HomePage: React.FC = () => {
@@ -127,13 +120,16 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: Event) => {
-        if (apiListRef.current && !apiListRef.current.contains(event.target as Node)) {
-          setIsOpen(false);
-        }
-      };
+      if (
+        apiListRef.current &&
+        !apiListRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
     document.addEventListener("click", handleClickOutside);
     return () => {
-    document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
     };
   }, []);
 
@@ -184,22 +180,36 @@ const HomePage: React.FC = () => {
             <ProviderList>
               {providers.length > 0 ? (
                 providers.map((provider, index) => (
-                  <ProviderItem key={index}>
+                  <ProviderItem
+                    key={index}
+                    style={{
+                      backgroundColor:
+                        expandedProvider === provider ? "#1c2025" : "",
+                      borderRadius: expandedProvider === provider ? "5px" : "0",
+                    }}
+                  >
                     <ProviderHeader>
                       <span>{provider}</span>
-                      <ArrowButton onClick={() => handleProviderClick(provider)}>
+                      <ArrowButton
+                        onClick={() => handleProviderClick(provider)}
+                      >
                         {expandedProvider === provider ? "▲" : "▼"}
                       </ArrowButton>
                     </ProviderHeader>
                     {expandedProvider === provider && apiDetails && (
                       <ApiDetailsContainer>
                         {apiDetails.logo && (
-                          <ApiLogo src={apiDetails.logo} alt={apiDetails.title} />
+                          <ApiLogo
+                            src={apiDetails.logo}
+                            alt={apiDetails.title}
+                          />
                         )}
                         {apiDetails.title && (
-                         <ApiTitleButton onClick={() => handleNavigate(provider, apiDetails)}>
-                         {apiDetails.title}
-                       </ApiTitleButton>
+                          <ApiTitleButton
+                            onClick={() => handleNavigate(provider, apiDetails)}
+                          >
+                            {apiDetails.title}
+                          </ApiTitleButton>
                         )}
                       </ApiDetailsContainer>
                     )}

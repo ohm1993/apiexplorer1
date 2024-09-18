@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import styled from 'styled-components';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import styled from "styled-components";
 
-// Define styled components
 const DetailPageContainer = styled.div`
   padding: 40px;
   background-color: #34495e;
   color: white;
-  border-radius: 15px;
   width: 100%;
   height: 100vh;
   margin: 0;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
@@ -38,11 +36,16 @@ const Title = styled.h1`
 `;
 
 const ContentSection = styled.div`
-  margin-left: 40px;
-  padding: 40px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 20px;
 `;
 
 const Section = styled.div`
+  margin-left: 80px;
   margin-bottom: 25px;
 `;
 
@@ -67,16 +70,14 @@ const Paragraph = styled.p`
 
 const ExploreButton = styled.button`
   padding: 10px 20px;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
   font-size: 16px;
-  align-self: center;
-  background-color: #16A085; 
+  color: #fff;
+  background-color: #4ab8e0; 
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 `;
 
-// Define types for props and state
 interface ApiDetails {
   info: {
     title: string;
@@ -86,14 +87,14 @@ interface ApiDetails {
       name?: string;
       url?: string;
     };
-    'x-logo': {
+    "x-logo": {
       url: string;
     };
   };
   swaggerUrl: string;
 }
 
-function DetailPage() {
+const DetailPage: React.FC = () => {
   const { provider } = useParams<{ provider: string }>();
   const navigate = useNavigate();
   const [apiDetails, setApiDetails] = useState<ApiDetails | null>(null);
@@ -105,9 +106,10 @@ function DetailPage() {
       .get(`${process.env.REACT_APP_API_BASE_URL}/${provider}.json`)
       .then((response) => {
         const apis = response.data.apis;
-        const selectedProvider = provider && apis[provider] 
-        ? apis[provider] 
-        : apis[Object.keys(apis)[0]];
+        const selectedProvider =
+          provider && apis[provider]
+            ? apis[provider]
+            : apis[Object.keys(apis)[0]];
         setApiDetails(selectedProvider);
         setLoading(false);
       })
@@ -132,7 +134,7 @@ function DetailPage() {
   return (
     <DetailPageContainer>
       <Header>
-        <Logo src={apiDetails.info['x-logo'].url} alt="Logo" />
+        <Logo src={apiDetails.info["x-logo"].url} alt="Logo" />
         <Title>{apiDetails.info.title}</Title>
       </Header>
       <ContentSection>
@@ -142,38 +144,48 @@ function DetailPage() {
         </Section>
         <Section>
           <SectionTitle>Swagger</SectionTitle>
-          <Link href={apiDetails.swaggerUrl} target="_blank" rel="noopener noreferrer">
+          <Link
+            href={apiDetails.swaggerUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {apiDetails.swaggerUrl}
           </Link>
         </Section>
         <Section>
           <SectionTitle>Contact</SectionTitle>
           <Paragraph>
-            <strong>Email:</strong>{' '}
+            <strong>Email:</strong>{" "}
             {apiDetails?.info?.contact?.email ? (
               <Link href={`mailto:${apiDetails.info.contact.email}`}>
                 {apiDetails.info.contact.email}
               </Link>
             ) : (
-              ''
+              ""
             )}
           </Paragraph>
           <Paragraph>
-            <strong>Name:</strong> {apiDetails?.info?.contact?.name || ''}
+            <strong>Name:</strong> {apiDetails?.info?.contact?.name || ""}
           </Paragraph>
           <Paragraph>
-            <strong>URL:</strong>{' '}
+            <strong>URL:</strong>{" "}
             {apiDetails?.info?.contact?.url ? (
-              <Link href={apiDetails.info.contact.url} target="_blank" rel="noopener noreferrer">
+              <Link
+                href={apiDetails.info.contact.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {apiDetails.info.contact.url}
               </Link>
             ) : (
-              ''
+              ""
             )}
           </Paragraph>
         </Section>
       </ContentSection>
-      <ExploreButton onClick={() => navigate('/')}>Explore more APIs</ExploreButton>
+      <ExploreButton onClick={() => navigate("/")}>
+        Explore more APIs
+      </ExploreButton>
     </DetailPageContainer>
   );
 }
