@@ -15,10 +15,21 @@ const AppContainer = styled.div<{ isOpen: boolean }>`
   justify-content: center;
   align-items: center;
   height: 100vh;
+  padding: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    height: auto;
+    padding: 10px;
+  }
 `;
 
 const CenteredContainer = styled.div`
   text-align: center;
+  width: 100%;
+  @media (max-width: 768px) {
+    padding: 0 10px;
+  }
 `;
 
 const ExploreButton = styled.button`
@@ -29,6 +40,10 @@ const ExploreButton = styled.button`
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  @media (max-width: 768px) {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
 `;
 
 const ApiList = styled.div`
@@ -43,6 +58,14 @@ const ApiList = styled.div`
   overflow-y: auto;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
   border-left: 2px solid #64d2ff;
+  @media (max-width: 768px) {
+    width: 100%;
+    height: 50%;
+    top: auto;
+    bottom: 0;
+    border-left: none;
+    border-top: 2px solid #64d2ff;
+  }
 `;
 
 const SelectProvider = styled.h2`
@@ -81,12 +104,19 @@ const ApiDetailsContainer = styled.div`
   align-items: center;
   height: 100%;
   padding: 10px 0 0 0;
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
 `;
 
 const ApiLogo = styled.img`
   object-fit: contain;
   width: 25px;
   height: 25px;
+  @media (max-width: 768px) {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 const ApiTitleButton = styled.button`
@@ -99,6 +129,10 @@ const ApiTitleButton = styled.button`
   border: none;
   background: none;
   vertical-align: middle;
+  @media (max-width: 768px) {
+    padding: 6px;
+    font-size: 14px;
+  }
 `;
 
 const HomePage: React.FC = () => {
