@@ -17,41 +17,71 @@ const DetailPageContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
+  overflow: hidden;
+  @media (max-width: 768px) {
+    padding: 20px;
+    height: auto;
+  }
 `;
 
 const Header = styled.div`
   text-align: center;
   margin-bottom: 30px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+  }
 `;
 
 const Logo = styled.img`
   width: 80px;
   height: 80px;
   margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    width: 60px;
+    height: 60px;
+  }
 `;
 
 const Title = styled.h1`
   font-size: 28px;
   margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+  }
 `;
 
 const ContentSection = styled.div`
-  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   width: 100%;
   padding: 20px;
+
+  @media (max-width: 768px) {
+    padding: 10px;
+  }
 `;
 
 const Section = styled.div`
   margin-left: 80px;
   margin-bottom: 25px;
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+    margin-bottom: 15px;
+  }
 `;
 
 const SectionTitle = styled.h3`
   font-size: 20px;
   margin-bottom: 10px;
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
 `;
 
 const Link = styled.a`
@@ -66,16 +96,24 @@ const Link = styled.a`
 const Paragraph = styled.p`
   font-size: 16px;
   margin: 5px 0;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 const ExploreButton = styled.button`
   padding: 10px 20px;
   font-size: 16px;
   color: #fff;
-  background-color: #4ab8e0; 
+  background-color: #4ab8e0;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  @media (max-width: 768px) {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
 `;
 
 interface ApiDetails {
@@ -185,7 +223,7 @@ const DetailPage: React.FC = () => {
       </ContentSection>
       <ExploreButton onClick={() => navigate("/")}>
         Explore more APIs
-      </ExploreButton>
+      </ExploreButton>     
     </DetailPageContainer>
   );
 }
