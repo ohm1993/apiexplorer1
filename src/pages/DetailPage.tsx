@@ -1,56 +1,38 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 
+// Styled components
 const DetailPageContainer = styled.div`
   padding: 40px;
-  background-color: #34495e;
   color: white;
-  width: 100%;
-  height: 100vh;
   margin: 0;
-  font-family: "Arial", sans-serif;
-  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-beween;
   align-items: center;
-  box-sizing: border-box;
-  overflow: hidden;
+  height: 100vh;
+  background-color: #34495e;
   @media (max-width: 768px) {
     padding: 20px;
-    height: auto;
   }
 `;
 
 const Header = styled.div`
   text-align: center;
   margin-bottom: 30px;
-
-  @media (max-width: 768px) {
-    margin-bottom: 20px;
-  }
 `;
 
 const Logo = styled.img`
   width: 80px;
   height: 80px;
   margin-bottom: 20px;
-
-  @media (max-width: 768px) {
-    width: 60px;
-    height: 60px;
-  }
 `;
 
 const Title = styled.h1`
   font-size: 28px;
   margin: 0;
-
-  @media (max-width: 768px) {
-    font-size: 24px;
-  }
 `;
 
 const ContentSection = styled.div`
@@ -58,48 +40,37 @@ const ContentSection = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   width: 100%;
-  padding: 20px;
-
-  @media (max-width: 768px) {
-    padding: 10px;
-  }
+  flex-wrap: wrap;
 `;
 
 const Section = styled.div`
-  margin-left: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 80px;
   margin-bottom: 25px;
-
   @media (max-width: 768px) {
-    margin-left: 0;
-    margin-bottom: 15px;
+    padding-left: 0;
   }
 `;
 
 const SectionTitle = styled.h3`
   font-size: 20px;
   margin-bottom: 10px;
-
-  @media (max-width: 768px) {
-    font-size: 18px;
-  }
 `;
 
 const Link = styled.a`
-  color: #1abc9c;
+  color: #fff;
   text-decoration: none;
-
   &:hover {
     text-decoration: underline;
   }
+  word-break: break-all;
 `;
 
 const Paragraph = styled.p`
   font-size: 16px;
   margin: 5px 0;
-
-  @media (max-width: 768px) {
-    font-size: 14px;
-  }
 `;
 
 const ExploreButton = styled.button`
@@ -110,12 +81,19 @@ const ExploreButton = styled.button`
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  @media (max-width: 768px) {
-    padding: 8px 16px;
-    font-size: 14px;
+
+  &:hover {
+    background-color: #3a9bc3;
   }
 `;
 
+const Danger = styled.div`
+  font-size: 16px;
+  margin: 5px 0;
+  word-break: break-all;
+`;
+
+// Define types for props and state
 interface ApiDetails {
   info: {
     title: string;
@@ -132,7 +110,7 @@ interface ApiDetails {
   swaggerUrl: string;
 }
 
-const DetailPage: React.FC = () => {
+function DetailPage() {
   const { provider } = useParams<{ provider: string }>();
   const navigate = useNavigate();
   const [apiDetails, setApiDetails] = useState<ApiDetails | null>(null);
@@ -170,61 +148,65 @@ const DetailPage: React.FC = () => {
   }
 
   return (
-    <DetailPageContainer>
-      <Header>
-        <Logo src={apiDetails.info["x-logo"].url} alt="Logo" />
-        <Title>{apiDetails.info.title}</Title>
-      </Header>
-      <ContentSection>
-        <Section>
-          <SectionTitle>Description</SectionTitle>
-          <Paragraph>{apiDetails.info.description}</Paragraph>
-        </Section>
-        <Section>
-          <SectionTitle>Swagger</SectionTitle>
-          <Link
-            href={apiDetails.swaggerUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {apiDetails.swaggerUrl}
-          </Link>
-        </Section>
-        <Section>
-          <SectionTitle>Contact</SectionTitle>
-          <Paragraph>
-            <strong>Email:</strong>{" "}
-            {apiDetails?.info?.contact?.email ? (
-              <Link href={`mailto:${apiDetails.info.contact.email}`}>
-                {apiDetails.info.contact.email}
-              </Link>
-            ) : (
-              ""
-            )}
-          </Paragraph>
-          <Paragraph>
-            <strong>Name:</strong> {apiDetails?.info?.contact?.name || ""}
-          </Paragraph>
-          <Paragraph>
-            <strong>URL:</strong>{" "}
-            {apiDetails?.info?.contact?.url ? (
-              <Link
-                href={apiDetails.info.contact.url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {apiDetails.info.contact.url}
-              </Link>
-            ) : (
-              ""
-            )}
-          </Paragraph>
-        </Section>
-      </ContentSection>
-      <ExploreButton onClick={() => navigate("/")}>
-        Explore more APIs
-      </ExploreButton>     
-    </DetailPageContainer>
+    <>
+      <DetailPageContainer>
+        <Header>
+          <Logo src={apiDetails.info["x-logo"].url} alt="Logo" />
+          <Title>{apiDetails.info.title}</Title>
+        </Header>
+        <ContentSection>
+          <Section>
+            <SectionTitle>Description</SectionTitle>
+            <Danger
+              dangerouslySetInnerHTML={{ __html: apiDetails.info.description }}
+            />
+          </Section>
+          <Section>
+            <SectionTitle>Swagger</SectionTitle>
+            <Link
+              href={apiDetails.swaggerUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {apiDetails.swaggerUrl}
+            </Link>
+          </Section>
+          <Section>
+            <SectionTitle>Contact</SectionTitle>
+            <Paragraph>
+              <strong>Email:</strong>{" "}
+              {apiDetails?.info?.contact?.email ? (
+                <Link href={`mailto:${apiDetails.info.contact.email}`}>
+                  {apiDetails.info.contact.email}
+                </Link>
+              ) : (
+                ""
+              )}
+            </Paragraph>
+            <Paragraph>
+              <strong>Name:</strong> {apiDetails?.info?.contact?.name || ""}
+            </Paragraph>
+            <Paragraph>
+              <strong>URL:</strong>{" "}
+              {apiDetails?.info?.contact?.url ? (
+                <Link
+                  href={apiDetails.info.contact.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {apiDetails.info.contact.url}
+                </Link>
+              ) : (
+                ""
+              )}
+            </Paragraph>
+          </Section>
+        </ContentSection>
+        <ExploreButton onClick={() => navigate("/")}>
+          Explore more APIs
+        </ExploreButton>
+      </DetailPageContainer>
+    </>
   );
 }
 
